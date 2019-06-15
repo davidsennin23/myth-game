@@ -9,7 +9,7 @@ export default class {
 
     generatePoints() {
         this.subject = new Subject();
-        setInterval(() => this.subject.next(this.pontuation += 10), 10);
+        setInterval(() => this.subject.next(this.pontuation += 10), 100);
     }
 
     getTotalPoints() {

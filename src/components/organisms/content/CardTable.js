@@ -4,42 +4,48 @@ import Cell from '../../atoms/table/Cell';
 import HeaderCell from '../../atoms/table/HeaderCell';
 import game from '../../../model/GameApp';
 
+const tableStyle = {
+    border: "1px solid #999"
+}
+
 export default class CardTable extends React.Component {
 
     state = {cards: []};
 
+    cards = {};
+
     componentDidMount() {
-        let c = 
-            game.getPlayer().getPlayerCards().map(playerCard => {
-                let card = playerCard.getCard();
-                let quantidade = playerCard.getQuantidade();
-                return (
-                    <TableRow>
-                        <Cell>{card.getNome()}</Cell>
-                        <Cell>{card.getDificuldade()}</Cell>
-                        <Cell>{quantidade}</Cell>
-                    </TableRow>
-                )
-            });
+        game
+            .getPlayer()
+            .getPlayerCards()
+            .forEach(playerCards => this._addNewCard(playerCards));
         this.setState({
-            cards: this.state.cards.concat(c)
+            cards: Object.values(this.cards)
         });
         game.getPlayer().subscribeToCardSpawn(this.addNewCard);
     }
 
-    addNewCard = (playerCard) => {
-        let c = [];
-        let card = playerCard.getCard();
-        let quantidade = playerCard.getQuantidade();
-        c.push(
+    _createRow = (card, quantidade) => {
+        return (
             <TableRow key={card.getId()}>
                 <Cell>{card.getNome()}</Cell>
                 <Cell>{card.getDificuldade()}</Cell>
                 <Cell>{quantidade}</Cell>
             </TableRow>
         );
+    }
+
+    _addNewCard = (playerCard) => {
+        let card = playerCard.getCard();
+        let quantidade = playerCard.getQuantidade();
+        let id = card.getId();
+        this.cards[id] = this._createRow(card, quantidade);
+    }
+
+    addNewCard = (playerCard) => {
+        this._addNewCard(playerCard);
         this.setState({
-            cards: this.state.cards.concat(c)
+            cards: Object.values(this.cards)
         });
     }
 
@@ -50,7 +56,7 @@ export default class CardTable extends React.Component {
     render() {
 
         return (
-            <table>
+            <table style={tableStyle}>
                 <thead>
                     <TableRow>
                         <HeaderCell>Nome</HeaderCell>

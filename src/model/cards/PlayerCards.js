@@ -58,6 +58,7 @@ export default class PlayerCards {
         let playerCard = this.cards[card.id];
         if (!playerCard) {
             playerCard = new _PlayerCard(card);
+            this.cards[card.id] = playerCard;
         }
         addQuantidade(playerCard, 1);
         return new PlayerCard(playerCard);

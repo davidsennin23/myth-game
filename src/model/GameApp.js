@@ -1,5 +1,6 @@
 import Player from "./player/Player";
 import cardGenerator from './game-utils/CardGenerator';
+import errorCatcher from './errors/ErrorCatcher';
 
 class GameApp {
 
@@ -24,10 +25,9 @@ class GameApp {
         this.generateNewCard(amount);
     }
 
-
-
 }
 
 const game = new GameApp();
+errorCatcher.registerFunction("card-gen", game, "getNewCard");
 
 export default game;
